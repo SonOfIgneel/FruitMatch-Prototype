@@ -33,10 +33,12 @@ public class GameManager : MonoBehaviour
     public List<GameObject> existingCards;
     public float timer = 0f;
     private bool timerRunning = false;
+    private Card pendingCard = null;
 
     private List<Card> allCards = new List<Card>();
     private List<Card> faceUpOrder = new List<Card>();
     private HashSet<int> matchedIds = new HashSet<int>();
+    private List<Card> faceUpBuffer = new List<Card>();
     private bool newGame;
 
     void Awake()
@@ -205,31 +207,27 @@ public class GameManager : MonoBehaviour
 
         if (resolvingMismatch)
         {
-            if (!faceUpOrder.Contains(card))
-                faceUpOrder.Add(card);
-
+            pendingCard = card;   
             return;
         }
 
-        if (faceUpOrder.Count == 2)
-        {
-            return;
-        }
+        faceUpOrder.RemoveAll(c => c == null || !c.IsFaceUp() || c.isMatched);
 
         if (!faceUpOrder.Contains(card))
             faceUpOrder.Add(card);
 
-        if (faceUpOrder.Count < 2) return;
+        if (faceUpOrder.Count < 2)
+            return;
 
-        Card a = faceUpOrder[0];
-        Card b = faceUpOrder[1];
+        Card a = faceUpOrder[faceUpOrder.Count - 2];
+        Card b = faceUpOrder[faceUpOrder.Count - 1];
 
         turnCount++;
-        Debug.Log("Turn: " + turnCount);
 
         if (a.id == b.id)
         {
             AudioManager.Instance.PlayMatch();
+
             a.isMatched = true;
             b.isMatched = true;
 
@@ -237,25 +235,14 @@ public class GameManager : MonoBehaviour
             DisableCardInteraction(b);
 
             foundPairs++;
-            Debug.Log("Pair found! Total found: " + foundPairs + "/" + totalPairs);
 
-            faceUpOrder.Clear();
+            faceUpOrder.Remove(a);
+            faceUpOrder.Remove(b);
 
             if (foundPairs >= totalPairs)
             {
-                Debug.Log("🎉 Game Completed!");
                 AudioManager.Instance.PlayGameOver();
-                foreach (GameObject go in existingCards)
-                {
-                    Destroy(go);
-                }
-                existingCards.Clear();
-                allCards.Clear();
-                faceUpOrder.Clear();
-                matchedIds.Clear();
-                uiManager.UpdateGameover(turnCount, timer);
-                gameOverPanel.SetActive(true);
-                saveData.Clear();
+                CompleteGame();
             }
             else
             {
@@ -270,23 +257,43 @@ public class GameManager : MonoBehaviour
         uiManager.UpdateAll(totalPairs, foundPairs, turnCount);
     }
 
+
+    public void CompleteGame()
+    {
+        foreach (GameObject go in existingCards)
+            Destroy(go);
+
+        existingCards.Clear();
+        allCards.Clear();
+        faceUpOrder.Clear();
+        matchedIds.Clear();
+
+        uiManager.UpdateGameover(turnCount, timer);
+        gameOverPanel.SetActive(true);
+        saveData.Clear();
+    }
+
     private IEnumerator FlipBackAfterDelay(Card a, Card b)
     {
         resolvingMismatch = true;
 
         yield return new WaitForSeconds(mismatchDelay);
 
-        if (!a.isMatched && a.IsFaceUp())
-            a.RequestFlip();
+        // Flip A & B only
+        if (!a.isMatched && a.IsFaceUp()) a.RequestFlip();
+        if (!b.isMatched && b.IsFaceUp()) b.RequestFlip();
 
-        if (!b.isMatched && b.IsFaceUp())
-            b.RequestFlip();
-
-        faceUpOrder.Clear();
+        faceUpOrder.Remove(a);
+        faceUpOrder.Remove(b);
 
         resolvingMismatch = false;
-    }
 
+        if (pendingCard != null)
+        {
+            faceUpOrder.Add(pendingCard);
+            pendingCard = null;
+        }
+    }
 
     private void DisableCardInteraction(Card c)
     {
@@ -319,6 +326,7 @@ public class GameManager : MonoBehaviour
             card.FlipToBackAnimated();
 
         Debug.Log("All cards hidden — game start!");
+        AudioManager.Instance.PlayFlip();
         canInteract = true;
         timer = 0f;
         timerRunning = true;

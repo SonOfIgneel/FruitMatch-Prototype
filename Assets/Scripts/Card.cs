@@ -100,7 +100,7 @@ public class Card : MonoBehaviour
 
     public void FlipToBackAnimated()
     {
-        if (isAnimating) return; // avoid animation stacking
+        if (isAnimating) return;
         StartCoroutine(FlipRoutine(false));
     }
 
