@@ -234,7 +234,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -110, y: -174.3}
+  m_AnchoredPosition: {x: -110, y: -174.29999}
   m_SizeDelta: {x: 1293.142, y: 179.125}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &125060631
@@ -2363,7 +2363,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &736869479
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2924,6 +2924,7 @@ MonoBehaviour:
   loadButton: {fileID: 802789340}
   quitButton: {fileID: 1365587835}
   mainMenuPanel: {fileID: 1557805238}
+  gamePlayPanel: {fileID: 1713420698}
   manager: {fileID: 1802646290}
   saveData: {fileID: 11400000, guid: c6122826144b65349a35ee34e05aec70, type: 2}
 --- !u!114 &925831127
@@ -2941,6 +2942,9 @@ MonoBehaviour:
   totalPairsText: {fileID: 2136684602}
   pairsFoundText: {fileID: 1239601522}
   turnsText: {fileID: 1728452703}
+  timerText: {fileID: 0}
+  totalPairsGameOverText: {fileID: 728080957}
+  timerGameOverText: {fileID: 620984566}
   homeButton: {fileID: 1861190418}
   gameOverScreen: {fileID: 736869478}
   gamePlayScreen: {fileID: 1713420698}
@@ -4988,6 +4992,8 @@ MonoBehaviour:
   canInteract: 0
   saveData: {fileID: 11400000, guid: c6122826144b65349a35ee34e05aec70, type: 2}
   uiManager: {fileID: 925831127}
+  gameOverPanel: {fileID: 736869478}
+  existingCards: []
 --- !u!1 &1804485630
 GameObject:
   m_ObjectHideFlags: 0
