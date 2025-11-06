@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public int foundPairs = 0;
     public int turnCount = 0;
     public float revealTime = 2f;
+    public bool canInteract = false;
 
     private List<Card> allCards = new List<Card>();
     private List<Card> faceUpOrder = new List<Card>();
@@ -239,19 +240,19 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RevealAllCardsTemporarily(float delay)
     {
+        canInteract = false;
+
         foreach (var card in allCards)
-        {
             card.ForceShowFront();
-        }
 
         yield return new WaitForSeconds(delay);
 
         foreach (var card in allCards)
-        {
             card.ForceShowBack();
-        }
 
         Debug.Log("All cards hidden — game start!");
+        canInteract = true;
     }
+
 
 }

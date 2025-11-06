@@ -41,6 +41,7 @@ public class Card : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (!GameManager.Instance.canInteract) return;
         if (isAnimating || isMatched) return;
         RequestFlip();
     }
