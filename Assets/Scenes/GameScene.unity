@@ -541,6 +541,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1802646289}
+  - component: {fileID: 1802646290}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -563,6 +564,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1802646290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802646288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9977a9cd0b4834e448e2318b44be3c64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardPrefab: {fileID: 9036814688109667939, guid: 390f3bfd0ff22c74a88e07d73cd02797, type: 3}
+  faceSprites:
+  - {fileID: 21300000, guid: 78594073efe844043a78598c0b725b75, type: 3}
+  - {fileID: 21300000, guid: 83dd16bdddd265847a28049af7929909, type: 3}
+  - {fileID: 21300000, guid: 35195458522f11f47af610629456dddf, type: 3}
+  - {fileID: 21300000, guid: b538c0ef1bf10284791464281013f974, type: 3}
+  backSprite: {fileID: 21300000, guid: 56276a52860923140ba23c3a3df76a79, type: 3}
+  rows: 2
+  cols: 3
+  startPosition: {x: -3, y: 2}
+  cellSize: {x: 1.2, y: 1.6}
+  scale: 1
+  mismatchDelay: 0.6
 --- !u!1 &2123787771
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,9 @@ using UnityEngine.Events;
 [RequireComponent(typeof(BoxCollider2D))]
 public class Card : MonoBehaviour
 {
+    public int id = -1;
+    public bool isMatched = false;
+
     [Header("Sprites")]
     public Sprite frontSprite;
     public Sprite backSprite;
@@ -18,7 +21,6 @@ public class Card : MonoBehaviour
     public UnityEvent<Card> onFlipRequested;
     public UnityEvent<Card> onFlipCompleted;
 
-    // Runtime
     private SpriteRenderer sr;
     private bool isFront = false;
     private bool isAnimating = false;
@@ -39,8 +41,7 @@ public class Card : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (isAnimating) return;
-
+        if (isAnimating || isMatched) return;
         RequestFlip();
     }
 
@@ -84,4 +85,5 @@ public class Card : MonoBehaviour
     }
 
     public bool IsFaceUp() => isFront;
+    public bool IsAnimating() => isAnimating;
 }
