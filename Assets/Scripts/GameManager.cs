@@ -253,6 +253,4 @@ public class GameManager : MonoBehaviour
         Debug.Log("All cards hidden — game start!");
         canInteract = true;
     }
-
-
 }
