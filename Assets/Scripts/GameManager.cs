@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
     [Header("Gameplay settings")]
     public float mismatchDelay = 0.6f;
 
-    // internal
     private List<Card> allCards = new List<Card>();
     private List<Card> faceUpOrder = new List<Card>();
     private HashSet<int> matchedIds = new HashSet<int>();
@@ -114,14 +113,15 @@ public class GameManager : MonoBehaviour
 
         if (card.IsFaceUp())
         {
-            if (!faceUpOrder.Contains(card)) faceUpOrder.Add(card);
+            faceUpOrder.RemoveAll(c => c == null || c.isMatched);
 
-            if (faceUpOrder.Count >= 2)
+            if (!faceUpOrder.Contains(card))
+                faceUpOrder.Add(card);
+
+            if (faceUpOrder.Count == 2)
             {
-                Card a = faceUpOrder[faceUpOrder.Count - 2];
-                Card b = faceUpOrder[faceUpOrder.Count - 1];
-
-                if (a == b) return; 
+                Card a = faceUpOrder[0];
+                Card b = faceUpOrder[1];
 
                 if (a.id == b.id)
                 {
@@ -132,6 +132,7 @@ public class GameManager : MonoBehaviour
                     DisableCardInteraction(a);
                     DisableCardInteraction(b);
 
+                    faceUpOrder.Clear();
                 }
                 else
                 {
@@ -144,6 +145,7 @@ public class GameManager : MonoBehaviour
             faceUpOrder.Remove(card);
         }
     }
+
 
     private IEnumerator FlipBackAfterDelay(Card a, Card b)
     {
