@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     public int turnCount = 0;
     public float revealTime = 2f;
     public bool canInteract = false;
+    public GameSaveData saveData;
 
     private List<Card> allCards = new List<Card>();
     private List<Card> faceUpOrder = new List<Card>();
@@ -37,9 +38,14 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    void Start()
+    public void StartNewGame()
     {
         GenerateGrid(rows, cols);
+    }
+
+    public void StartLoadGame()
+    {
+        LoadGame();
     }
 
     public void GenerateGrid(int r, int c)
@@ -195,9 +201,12 @@ public class GameManager : MonoBehaviour
                     if (foundPairs >= totalPairs)
                     {
                         Debug.Log("🎉 Game Completed!");
+                        saveData.Clear();
                     }
 
                     faceUpOrder.Clear();
+
+                    SaveGame();
                 }
                 else
                 {
@@ -252,5 +261,76 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("All cards hidden — game start!");
         canInteract = true;
+    }
+
+    public void SaveGame()
+    {
+        saveData.rows = rows;
+        saveData.cols = cols;
+
+        int size = rows * cols;
+
+        saveData.cardIds = new int[size];
+        saveData.matched = new bool[size];
+        saveData.faceUp = new bool[size];
+
+        for (int i = 0; i < allCards.Count; i++)
+        {
+            saveData.cardIds[i] = allCards[i].id;
+            saveData.matched[i] = allCards[i].isMatched;
+            saveData.faceUp[i] = allCards[i].IsFaceUp();
+        }
+
+        saveData.turnCount = turnCount;
+        saveData.foundPairs = foundPairs;
+        saveData.totalPairs = totalPairs;
+
+        saveData.hasSavedGame = true;
+
+        Debug.Log("✅ Game Saved");
+    }
+
+    public void LoadGame()
+    {
+        if (!saveData.hasSavedGame)
+        {
+            Debug.Log("No saved game found");
+            return;
+        }
+
+        rows = saveData.rows;
+        cols = saveData.cols;
+
+        GenerateGrid(rows, cols);
+
+        int size = rows * cols;
+
+        for (int i = 0; i < size; i++)
+        {
+            allCards[i].id = saveData.cardIds[i];
+            allCards[i].frontSprite = faceSprites[saveData.cardIds[i]];
+
+            if (saveData.matched[i])
+            {
+                allCards[i].ForceShowFront();
+                DisableCardInteraction(allCards[i]);
+            }
+            else if (saveData.faceUp[i])
+            {
+                allCards[i].ForceShowFront();
+            }
+            else
+            {
+                allCards[i].ForceShowBack();
+            }
+        }
+
+        turnCount = saveData.turnCount;
+        foundPairs = saveData.foundPairs;
+        totalPairs = saveData.totalPairs;
+
+        canInteract = true;
+
+        Debug.Log("✅ Game Loaded");
     }
 }

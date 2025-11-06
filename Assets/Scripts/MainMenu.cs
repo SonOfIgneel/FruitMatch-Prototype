@@ -13,6 +13,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button quitButton;
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private GameManager manager;
+    [SerializeField] private GameSaveData saveData;
 
     private int rows, cols;
 
@@ -29,7 +30,7 @@ public class MainMenu : MonoBehaviour
         loadButton.onClick.AddListener(OnLoadGame);
         quitButton.onClick.AddListener(OnQuitGame);
 
-        if (!PlayerPrefs.HasKey("hasSave"))
+        if (saveData.cardIds == null)
             loadButton.interactable = false;
     }
 
@@ -38,15 +39,14 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.SetInt("rows", rows);
         PlayerPrefs.SetInt("cols", cols);
         PlayerPrefs.SetString("difficulty", difficultyDropdown.options[difficultyDropdown.value].text);
-        PlayerPrefs.SetInt("hasSave", 0);
-        PlayerPrefs.Save();
         mainMenuPanel.SetActive(false);
-        manager.gameObject.SetActive(true);
+        manager.StartNewGame();
     }
 
     void OnLoadGame()
     {
-        SceneManager.LoadScene("GameScene");
+        mainMenuPanel.SetActive(false);
+        manager.StartLoadGame();
     }
 
     void OnQuitGame()
