@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Gameplay settings")]
     public float mismatchDelay = 0.6f;
+    public int totalPairs = 0;
+    public int foundPairs = 0;
+    public int turnCount = 0;
 
     private List<Card> allCards = new List<Card>();
     private List<Card> faceUpOrder = new List<Card>();
@@ -39,7 +42,6 @@ public class GameManager : MonoBehaviour
 
     public void GenerateGrid(int r, int c)
     {
-        // cleanup existing
         foreach (var cd in allCards) Destroy(cd.gameObject);
         allCards.Clear();
         faceUpOrder.Clear();
@@ -100,6 +102,9 @@ public class GameManager : MonoBehaviour
                 idx++;
             }
         }
+        
+        totalPairs = pairs;
+        foundPairs = 0;
     }
 
     private void OnCardFlipRequested(Card card)
@@ -120,6 +125,9 @@ public class GameManager : MonoBehaviour
 
             if (faceUpOrder.Count == 2)
             {
+                turnCount++;
+                Debug.Log("Turn: " + turnCount);
+
                 Card a = faceUpOrder[0];
                 Card b = faceUpOrder[1];
 
@@ -131,6 +139,14 @@ public class GameManager : MonoBehaviour
 
                     DisableCardInteraction(a);
                     DisableCardInteraction(b);
+
+                    foundPairs++;
+                    Debug.Log("Pair found! Total found: " + foundPairs + "/" + totalPairs);
+
+                    if (foundPairs >= totalPairs)
+                    {
+                        Debug.Log("🎉 Game Completed!");
+                    }
 
                     faceUpOrder.Clear();
                 }
