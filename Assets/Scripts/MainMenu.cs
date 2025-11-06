@@ -30,7 +30,7 @@ public class MainMenu : MonoBehaviour
         loadButton.onClick.AddListener(OnLoadGame);
         quitButton.onClick.AddListener(OnQuitGame);
 
-        if (saveData.cardIds == null)
+        if (saveData.rows == 0)
             loadButton.interactable = false;
     }
 

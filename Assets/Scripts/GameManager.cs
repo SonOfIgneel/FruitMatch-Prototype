@@ -40,7 +40,8 @@ public class GameManager : MonoBehaviour
 
     public void StartNewGame()
     {
-        GenerateGrid(rows, cols);
+        faceUpOrder.Clear();
+        GenerateGrid(rows, cols, true);
     }
 
     public void StartLoadGame()
@@ -48,7 +49,7 @@ public class GameManager : MonoBehaviour
         LoadGame();
     }
 
-    public void GenerateGrid(int r, int c)
+    public void GenerateGrid(int r, int c, bool doReveal = true)
     {
         foreach (var cd in allCards) Destroy(cd.gameObject);
         allCards.Clear();
@@ -141,7 +142,10 @@ public class GameManager : MonoBehaviour
         totalPairs = pairs;
         foundPairs = 0;
 
-        StartCoroutine(RevealAllCardsTemporarily(revealTime));
+        if (doReveal)
+            StartCoroutine(RevealAllCardsTemporarily(revealTime));
+        else
+            canInteract = true;
     }
 
     private float AdjustScaleToFitScreen(float gridWidth, float gridHeight)
@@ -203,10 +207,10 @@ public class GameManager : MonoBehaviour
                         Debug.Log("🎉 Game Completed!");
                         saveData.Clear();
                     }
+                    else
+                        SaveGame();
 
                     faceUpOrder.Clear();
-
-                    SaveGame();
                 }
                 else
                 {
@@ -301,7 +305,7 @@ public class GameManager : MonoBehaviour
         rows = saveData.rows;
         cols = saveData.cols;
 
-        GenerateGrid(rows, cols);
+        GenerateGrid(rows, cols, false);
 
         int size = rows * cols;
 
@@ -312,18 +316,21 @@ public class GameManager : MonoBehaviour
 
             if (saveData.matched[i])
             {
+                allCards[i].isMatched = true;
                 allCards[i].ForceShowFront();
-                DisableCardInteraction(allCards[i]);
-            }
-            else if (saveData.faceUp[i])
-            {
-                allCards[i].ForceShowFront();
+                DisableCardInteraction(allCards[i]); 
             }
             else
             {
-                allCards[i].ForceShowBack();
+                allCards[i].isMatched = false;
+
+                if (saveData.faceUp[i])
+                    allCards[i].ForceShowFront();
+                else
+                    allCards[i].ForceShowBack();
             }
         }
+
 
         turnCount = saveData.turnCount;
         foundPairs = saveData.foundPairs;

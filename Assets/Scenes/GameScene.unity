@@ -2322,6 +2322,7 @@ MonoBehaviour:
   quitButton: {fileID: 1365587835}
   mainMenuPanel: {fileID: 1557805238}
   manager: {fileID: 1802646290}
+  saveData: {fileID: 11400000, guid: c6122826144b65349a35ee34e05aec70, type: 2}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -3998,7 +3999,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1802646289
 Transform:
   m_ObjectHideFlags: 0
@@ -4053,8 +4054,9 @@ MonoBehaviour:
   totalPairs: 0
   foundPairs: 0
   turnCount: 0
-  revealTime: 2
+  revealTime: 0.5
   canInteract: 0
+  saveData: {fileID: 11400000, guid: c6122826144b65349a35ee34e05aec70, type: 2}
 --- !u!1 &1804485630
 GameObject:
   m_ObjectHideFlags: 0
