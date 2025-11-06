@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     public GameSaveData saveData;
     private bool resolvingMismatch = false;
     public UIManager uiManager;
+    public GameObject gameOverPanel;
+    public List<GameObject> existingCards;
 
     private List<Card> allCards = new List<Card>();
     private List<Card> faceUpOrder = new List<Card>();
@@ -120,6 +122,7 @@ public class GameManager : MonoBehaviour
 
                 GameObject go = Instantiate(cardPrefab, pos, Quaternion.identity);
                 go.transform.localScale = Vector3.one * fitScale;
+                existingCards.Add(go);
 
                 Card card = go.GetComponent<Card>();
                 if (card == null)
@@ -228,6 +231,16 @@ public class GameManager : MonoBehaviour
             if (foundPairs >= totalPairs)
             {
                 Debug.Log("🎉 Game Completed!");
+                foreach(GameObject go in existingCards)
+                {
+                    Destroy(go);
+                }
+                existingCards.Clear();
+                allCards.Clear();
+                faceUpOrder.Clear();
+                matchedIds.Clear();
+                uiManager.UpdateGameover(turnCount);
+                gameOverPanel.SetActive(true);
                 saveData.Clear();
             }
             else

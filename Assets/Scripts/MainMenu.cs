@@ -11,7 +11,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button startButton;
     [SerializeField] private Button loadButton;
     [SerializeField] private Button quitButton;
-    [SerializeField] private GameObject mainMenuPanel;
+    [SerializeField] private GameObject mainMenuPanel, gamePlayPanel;
     [SerializeField] private GameManager manager;
     [SerializeField] private GameSaveData saveData;
 
@@ -38,12 +38,14 @@ public class MainMenu : MonoBehaviour
     void OnStartNewGame()
     {
         mainMenuPanel.SetActive(false);
+        gamePlayPanel.SetActive(true);
         manager.StartNewGame();
     }
 
     void OnLoadGame()
     {
         mainMenuPanel.SetActive(false);
+        gamePlayPanel.SetActive(true);
         manager.StartLoadGame();
     }
 
