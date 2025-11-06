@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public int totalPairs = 0;
     public int foundPairs = 0;
     public int turnCount = 0;
+    public float revealTime = 2f;
 
     private List<Card> allCards = new List<Card>();
     private List<Card> faceUpOrder = new List<Card>();
@@ -132,6 +133,8 @@ public class GameManager : MonoBehaviour
 
         totalPairs = pairs;
         foundPairs = 0;
+
+        StartCoroutine(RevealAllCardsTemporarily(revealTime));
     }
 
     private float AdjustScaleToFitScreen(float gridWidth, float gridHeight)
@@ -233,4 +236,22 @@ public class GameManager : MonoBehaviour
             list[k] = tmp;
         }
     }
+
+    private IEnumerator RevealAllCardsTemporarily(float delay)
+    {
+        foreach (var card in allCards)
+        {
+            card.ForceShowFront();
+        }
+
+        yield return new WaitForSeconds(delay);
+
+        foreach (var card in allCards)
+        {
+            card.ForceShowBack();
+        }
+
+        Debug.Log("All cards hidden — game start!");
+    }
+
 }

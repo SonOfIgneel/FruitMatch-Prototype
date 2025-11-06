@@ -84,6 +84,19 @@ public class Card : MonoBehaviour
         onFlipCompleted?.Invoke(this);
     }
 
+    public void ForceShowFront()
+    {
+        isFront = true;
+        sr.sprite = frontSprite;
+    }
+
+    public void ForceShowBack()
+    {
+        isFront = false;
+        sr.sprite = backSprite;
+    }
+
+
     public bool IsFaceUp() => isFront;
     public bool IsAnimating() => isAnimating;
 }
