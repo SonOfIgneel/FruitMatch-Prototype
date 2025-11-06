@@ -28,10 +28,12 @@ public class GameManager : MonoBehaviour
     public bool canInteract = false;
     public GameSaveData saveData;
     private bool resolvingMismatch = false;
+    public UIManager uiManager;
 
     private List<Card> allCards = new List<Card>();
     private List<Card> faceUpOrder = new List<Card>();
     private HashSet<int> matchedIds = new HashSet<int>();
+    private bool newGame;
 
     void Awake()
     {
@@ -42,6 +44,7 @@ public class GameManager : MonoBehaviour
     public void StartNewGame()
     {
         faceUpOrder.Clear();
+        newGame = true;
         GenerateGrid(rows, cols, true);
     }
 
@@ -147,6 +150,9 @@ public class GameManager : MonoBehaviour
             StartCoroutine(RevealAllCardsTemporarily(revealTime));
         else
             canInteract = true;
+
+        if(newGame)
+            uiManager.UpdateAll(totalPairs, foundPairs, turnCount);
     }
 
     private float AdjustScaleToFitScreen(float gridWidth, float gridHeight)
@@ -233,6 +239,8 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(FlipBackAfterDelay(a, b));
         }
+
+        uiManager.UpdateAll(totalPairs, foundPairs, turnCount);
     }
 
     private IEnumerator FlipBackAfterDelay(Card a, Card b)
@@ -357,6 +365,8 @@ public class GameManager : MonoBehaviour
         totalPairs = saveData.totalPairs;
 
         canInteract = true;
+
+        uiManager.UpdateAll(saveData.totalPairs, saveData.foundPairs, saveData.turnCount);
 
         Debug.Log("✅ Game Loaded");
     }
