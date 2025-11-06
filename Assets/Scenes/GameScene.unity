@@ -1232,6 +1232,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 453584850}
+  - component: {fileID: 453584851}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -1254,6 +1255,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &453584851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453584849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c36773a9c1a58c4fa74633005d8d552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flipSFX: {fileID: 8300000, guid: a31088bbf5ce56c40ad9bf4bb2e8b65e, type: 3}
+  matchSFX: {fileID: 8300000, guid: 311a6e7b870b50a48993f3cbbe6fc21b, type: 3}
+  mismatchSFX: {fileID: 8300000, guid: df56e8e279aa8924491183cd762c3ba4, type: 3}
+  gameOverSFX: {fileID: 8300000, guid: a578c86c8d7c7384d857c46d9ce6f2a4, type: 3}
 --- !u!1 &461867798
 GameObject:
   m_ObjectHideFlags: 0

@@ -48,8 +48,8 @@ public class Card : MonoBehaviour
 
     public void RequestFlip()
     {
+        AudioManager.Instance.PlayFlip();
         onFlipRequested?.Invoke(this);
-
         StartCoroutine(FlipRoutine(!isFront));
     }
 
@@ -93,10 +93,16 @@ public class Card : MonoBehaviour
 
     public void ForceShowBack()
     {
+        AudioManager.Instance.PlayFlip();
         isFront = false;
         sr.sprite = backSprite;
     }
 
+    public void FlipToBackAnimated()
+    {
+        if (isAnimating) return; // avoid animation stacking
+        StartCoroutine(FlipRoutine(false));
+    }
 
     public bool IsFaceUp() => isFront;
     public bool IsAnimating() => isAnimating;

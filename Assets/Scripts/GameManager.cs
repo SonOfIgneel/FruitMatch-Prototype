@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     public float scale = 1f;
 
     [Header("Gameplay settings")]
-    public float mismatchDelay = 0.6f;
+    public float mismatchDelay = 0.5f;
     public int totalPairs = 0;
     public int foundPairs = 0;
     public int turnCount = 0;
@@ -229,6 +229,7 @@ public class GameManager : MonoBehaviour
 
         if (a.id == b.id)
         {
+            AudioManager.Instance.PlayMatch();
             a.isMatched = true;
             b.isMatched = true;
 
@@ -243,7 +244,8 @@ public class GameManager : MonoBehaviour
             if (foundPairs >= totalPairs)
             {
                 Debug.Log("🎉 Game Completed!");
-                foreach(GameObject go in existingCards)
+                AudioManager.Instance.PlayGameOver();
+                foreach (GameObject go in existingCards)
                 {
                     Destroy(go);
                 }
@@ -314,7 +316,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         foreach (var card in allCards)
-            card.ForceShowBack();
+            card.FlipToBackAnimated();
 
         Debug.Log("All cards hidden — game start!");
         canInteract = true;
