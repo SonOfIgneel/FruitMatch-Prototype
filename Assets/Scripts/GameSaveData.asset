@@ -20,4 +20,5 @@ MonoBehaviour:
   turnCount: 0
   foundPairs: 0
   totalPairs: 0
+  savedTime: 0
   hasSavedGame: 0
