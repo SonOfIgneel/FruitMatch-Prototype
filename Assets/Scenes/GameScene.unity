@@ -670,9 +670,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 39e7bfc48bd2ad5498de1ecf92996be8, type: 3}
   - {fileID: 21300000, guid: 3fcebd6ae19f841478e75466fa887277, type: 3}
   backSprite: {fileID: 21300000, guid: 56276a52860923140ba23c3a3df76a79, type: 3}
-  rows: 2
-  cols: 3
+  rows: 3
+  cols: 4
   startPosition: {x: -3, y: 2}
   cellSize: {x: 2.4, y: 3.4}
   scale: 1
   mismatchDelay: 0.6
+  totalPairs: 0
+  foundPairs: 0
+  turnCount: 0

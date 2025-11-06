@@ -15,8 +15,8 @@ public class GameManager : MonoBehaviour
     [Header("Grid settings")]
     public int rows = 2;
     public int cols = 3;
-    public Vector2 startPosition = new Vector2(-3f, 2f);
     public Vector2 cellSize = new Vector2(1.2f, 1.6f);
+    public Vector2 gridOffset = new Vector2(0f, 0.8f);
     public float scale = 1f;
 
     [Header("Gameplay settings")]
@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
 
         rows = Mathf.Max(1, r);
         cols = Mathf.Max(1, c);
+        turnCount = 0;
 
         int total = rows * cols;
         if (total % 2 != 0)
@@ -73,14 +74,40 @@ public class GameManager : MonoBehaviour
         }
         Shuffle(indices);
 
+        float gridWidth = cols * cellSize.x;
+        float gridHeight = rows * cellSize.y;
+
+        float fitScale = AdjustScaleToFitScreen(gridWidth, gridHeight);
+
+        if (rows > 3)
+        {
+            float scaleBoost = 1f + Mathf.Clamp01((rows - 3) * 0.1f);
+            fitScale *= scaleBoost;
+        }
+
+        Vector2 scaledCell = cellSize * fitScale;
+
+        Vector2 startPosition = new Vector2(
+            -(cols - 1) * scaledCell.x / 2f,
+            (rows - 1) * scaledCell.y / 2f
+        );
+
+        Vector2 gridOffset = new Vector2(1.0f, 0.8f);
+
         int idx = 0;
         for (int y = 0; y < rows; y++)
         {
             for (int x = 0; x < cols; x++)
             {
-                Vector3 pos = new Vector3(startPosition.x + x * cellSize.x, startPosition.y - y * cellSize.y, 0f);
+                Vector3 pos = new Vector3(
+                    startPosition.x + x * scaledCell.x,
+                    startPosition.y - y * scaledCell.y,
+                    0f
+                ) + (Vector3)gridOffset;
+
                 GameObject go = Instantiate(cardPrefab, pos, Quaternion.identity);
-                go.transform.localScale = Vector3.one * scale;
+                go.transform.localScale = Vector3.one * fitScale;
+
                 Card card = go.GetComponent<Card>();
                 if (card == null)
                 {
@@ -102,9 +129,27 @@ public class GameManager : MonoBehaviour
                 idx++;
             }
         }
-        
+
         totalPairs = pairs;
         foundPairs = 0;
+    }
+
+    private float AdjustScaleToFitScreen(float gridWidth, float gridHeight)
+    {
+        Camera cam = Camera.main;
+        float screenHeight = 2f * cam.orthographicSize;
+        float screenWidth = screenHeight * cam.aspect;
+
+        float padding = 0.9f;
+
+        float widthRatio = (screenWidth * padding) / gridWidth;
+        float heightRatio = (screenHeight * padding) / gridHeight;
+        float fitRatio = Mathf.Min(widthRatio, heightRatio);
+
+        fitRatio = Mathf.Min(fitRatio, 1f);
+
+        Debug.Log($"Adjusted scale ratio: {fitRatio:F2}");
+        return fitRatio;
     }
 
     private void OnCardFlipRequested(Card card)
