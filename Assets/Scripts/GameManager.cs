@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+        uiManager.SetTimer(timer);
     }
 
     void Update()
