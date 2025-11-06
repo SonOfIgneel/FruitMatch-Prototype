@@ -5147,7 +5147,7 @@ MonoBehaviour:
   gameOverPanel: {fileID: 736869478}
   existingCards: []
   timer: 0
-  menu: {fileID: 0}
+  menu: {fileID: 925831126}
 --- !u!1 &1804485630
 GameObject:
   m_ObjectHideFlags: 0

@@ -242,6 +242,7 @@ public class GameManager : MonoBehaviour
             if (foundPairs >= totalPairs)
             {
                 AudioManager.Instance.PlayGameOver();
+                SaveGame();
                 CompleteGame();
             }
             else
@@ -260,9 +261,10 @@ public class GameManager : MonoBehaviour
 
     public void CompleteGame()
     {
+        menu.loadButton.interactable = false;
+        saveData.Clear();
         foreach (GameObject go in existingCards)
             Destroy(go);
-
         existingCards.Clear();
         allCards.Clear();
         faceUpOrder.Clear();
@@ -270,8 +272,9 @@ public class GameManager : MonoBehaviour
 
         uiManager.UpdateGameover(turnCount, timer);
         gameOverPanel.SetActive(true);
-        menu.loadButton.interactable = false; ;
-        saveData.Clear();
+        timerRunning = false;
+        timer = 0;
+        uiManager.SetTimer(timer);
     }
 
     private IEnumerator FlipBackAfterDelay(Card a, Card b)
