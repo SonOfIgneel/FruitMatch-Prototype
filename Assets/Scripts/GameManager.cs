@@ -34,11 +34,11 @@ public class GameManager : MonoBehaviour
     public float timer = 0f;
     private bool timerRunning = false;
     private Card pendingCard = null;
+    public MainMenu menu;
 
     private List<Card> allCards = new List<Card>();
     private List<Card> faceUpOrder = new List<Card>();
     private HashSet<int> matchedIds = new HashSet<int>();
-    private List<Card> faceUpBuffer = new List<Card>();
     private bool newGame;
 
     void Awake()
@@ -270,6 +270,7 @@ public class GameManager : MonoBehaviour
 
         uiManager.UpdateGameover(turnCount, timer);
         gameOverPanel.SetActive(true);
+        menu.loadButton.interactable = false; ;
         saveData.Clear();
     }
 

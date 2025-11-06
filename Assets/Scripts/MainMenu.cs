@@ -9,7 +9,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TMP_Dropdown gridDropdown;
     [SerializeField] private TMP_Dropdown difficultyDropdown;
     [SerializeField] private Button startButton;
-    [SerializeField] private Button loadButton;
+    public Button loadButton;
     [SerializeField] private Button quitButton;
     [SerializeField] private GameObject mainMenuPanel, gamePlayPanel;
     [SerializeField] private GameManager manager;
