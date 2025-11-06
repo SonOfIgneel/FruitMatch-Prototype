@@ -13,6 +13,7 @@ public class GameSaveData : ScriptableObject
     public int turnCount;
     public int foundPairs;
     public int totalPairs;
+    public float savedTime;
 
     public bool hasSavedGame = false;
 
@@ -26,6 +27,7 @@ public class GameSaveData : ScriptableObject
         turnCount = 0;
         foundPairs = 0;
         totalPairs = 0;
+        savedTime = 0;
         hasSavedGame = false;
     }
 }

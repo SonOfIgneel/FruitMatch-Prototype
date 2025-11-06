@@ -37,6 +37,12 @@ public class UIManager : MonoBehaviour
             turnsText.text = "Total turns attempted: " + value.ToString();
     }
 
+    public void SetTimer(float seconds)
+    {
+        if (timerText != null)
+            timerText.text = "Time: " + seconds.ToString("0.0") + "s";
+    }
+
     public void UpdateAll(int totalPairs, int foundPairs, int turns)
     {
         SetTotalPairs(totalPairs);
@@ -44,9 +50,10 @@ public class UIManager : MonoBehaviour
         SetTurns(turns);
     }
 
-    public void UpdateGameover(int turns)
+    public void UpdateGameover(int turns, float seconds)
     {
         totalPairsGameOverText.text = "Turns attempted: " + turns;
+        timerGameOverText.text = "Game completed in: " + seconds.ToString("0.0") + "s";
     }
 
     public void OnHomeButton()

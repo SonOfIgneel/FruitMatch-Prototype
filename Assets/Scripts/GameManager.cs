@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
     public UIManager uiManager;
     public GameObject gameOverPanel;
     public List<GameObject> existingCards;
+    public float timer = 0f;
+    private bool timerRunning = false;
 
     private List<Card> allCards = new List<Card>();
     private List<Card> faceUpOrder = new List<Card>();
@@ -41,6 +43,16 @@ public class GameManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+    }
+
+    void Update()
+    {
+        if (timerRunning)
+        {
+            timer += Time.deltaTime;
+            uiManager.SetTimer(timer);
+            saveData.savedTime = timer;
+        }
     }
 
     public void StartNewGame()
@@ -239,7 +251,7 @@ public class GameManager : MonoBehaviour
                 allCards.Clear();
                 faceUpOrder.Clear();
                 matchedIds.Clear();
-                uiManager.UpdateGameover(turnCount);
+                uiManager.UpdateGameover(turnCount, timer);
                 gameOverPanel.SetActive(true);
                 saveData.Clear();
             }
@@ -306,6 +318,8 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("All cards hidden — game start!");
         canInteract = true;
+        timer = 0f;
+        timerRunning = true;
     }
 
     public void SaveGame()
@@ -378,6 +392,10 @@ public class GameManager : MonoBehaviour
         totalPairs = saveData.totalPairs;
 
         canInteract = true;
+
+        timer = saveData.savedTime;
+        uiManager.SetTimer(timer);
+        timerRunning = true;
 
         uiManager.UpdateAll(saveData.totalPairs, saveData.foundPairs, saveData.turnCount);
 
