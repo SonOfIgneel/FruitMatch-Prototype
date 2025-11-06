@@ -25,6 +25,7 @@ public class MainMenu : MonoBehaviour
 
         difficultyDropdown.ClearOptions();
         difficultyDropdown.AddOptions(new System.Collections.Generic.List<string> { "Easy", "Medium", "Hard" });
+        difficultyDropdown.onValueChanged.AddListener(OnDifficultyChanged);
 
         startButton.onClick.AddListener(OnStartNewGame);
         loadButton.onClick.AddListener(OnLoadGame);
@@ -36,9 +37,6 @@ public class MainMenu : MonoBehaviour
 
     void OnStartNewGame()
     {
-        PlayerPrefs.SetInt("rows", rows);
-        PlayerPrefs.SetInt("cols", cols);
-        PlayerPrefs.SetString("difficulty", difficultyDropdown.options[difficultyDropdown.value].text);
         mainMenuPanel.SetActive(false);
         manager.StartNewGame();
     }
@@ -68,6 +66,16 @@ public class MainMenu : MonoBehaviour
         manager.cols = cols;
 
         Debug.Log("Selected Grid: " + rows + "x" + cols);
+    }
+
+    private void OnDifficultyChanged(int index)
+    {
+        if(index == 0)
+            manager.revealTime = 2f;
+        else if(index == 1)
+            manager.revealTime = 1f;
+        else
+            manager.revealTime = 0.5f;
     }
 
 }

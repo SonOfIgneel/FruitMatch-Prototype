@@ -4054,7 +4054,7 @@ MonoBehaviour:
   totalPairs: 0
   foundPairs: 0
   turnCount: 0
-  revealTime: 0.5
+  revealTime: 2
   canInteract: 0
   saveData: {fileID: 11400000, guid: c6122826144b65349a35ee34e05aec70, type: 2}
 --- !u!1 &1804485630

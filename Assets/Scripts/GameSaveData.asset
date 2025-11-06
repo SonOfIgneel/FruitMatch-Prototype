@@ -16,7 +16,7 @@ MonoBehaviour:
   cols: 0
   cardIds: 
   matched: 
-  faceUp: 010101010101
+  faceUp: 
   turnCount: 0
   foundPairs: 0
   totalPairs: 0

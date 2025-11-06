@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     public float revealTime = 2f;
     public bool canInteract = false;
     public GameSaveData saveData;
+    private bool resolvingMismatch = false;
 
     private List<Card> allCards = new List<Card>();
     private List<Card> faceUpOrder = new List<Card>();
@@ -175,63 +176,82 @@ public class GameManager : MonoBehaviour
     {
         if (card.isMatched) return;
 
-        if (card.IsFaceUp())
+        if (!card.IsFaceUp())
         {
-            faceUpOrder.RemoveAll(c => c == null || c.isMatched);
+            faceUpOrder.Remove(card);
+            return;
+        }
 
+        if (resolvingMismatch)
+        {
             if (!faceUpOrder.Contains(card))
                 faceUpOrder.Add(card);
 
-            if (faceUpOrder.Count == 2)
+            return;
+        }
+
+        if (faceUpOrder.Count == 2)
+        {
+            return;
+        }
+
+        if (!faceUpOrder.Contains(card))
+            faceUpOrder.Add(card);
+
+        if (faceUpOrder.Count < 2) return;
+
+        Card a = faceUpOrder[0];
+        Card b = faceUpOrder[1];
+
+        turnCount++;
+        Debug.Log("Turn: " + turnCount);
+
+        if (a.id == b.id)
+        {
+            a.isMatched = true;
+            b.isMatched = true;
+
+            DisableCardInteraction(a);
+            DisableCardInteraction(b);
+
+            foundPairs++;
+            Debug.Log("Pair found! Total found: " + foundPairs + "/" + totalPairs);
+
+            faceUpOrder.Clear();
+
+            if (foundPairs >= totalPairs)
             {
-                turnCount++;
-                Debug.Log("Turn: " + turnCount);
-
-                Card a = faceUpOrder[0];
-                Card b = faceUpOrder[1];
-
-                if (a.id == b.id)
-                {
-                    matchedIds.Add(a.id);
-                    a.isMatched = true;
-                    b.isMatched = true;
-
-                    DisableCardInteraction(a);
-                    DisableCardInteraction(b);
-
-                    foundPairs++;
-                    Debug.Log("Pair found! Total found: " + foundPairs + "/" + totalPairs);
-
-                    if (foundPairs >= totalPairs)
-                    {
-                        Debug.Log("🎉 Game Completed!");
-                        saveData.Clear();
-                    }
-                    else
-                        SaveGame();
-
-                    faceUpOrder.Clear();
-                }
-                else
-                {
-                    StartCoroutine(FlipBackAfterDelay(a, b));
-                }
+                Debug.Log("🎉 Game Completed!");
+                saveData.Clear();
+            }
+            else
+            {
+                SaveGame();
             }
         }
         else
         {
-            faceUpOrder.Remove(card);
+            StartCoroutine(FlipBackAfterDelay(a, b));
         }
     }
 
-
     private IEnumerator FlipBackAfterDelay(Card a, Card b)
     {
+        resolvingMismatch = true;
+
         yield return new WaitForSeconds(mismatchDelay);
 
-        if (!a.isMatched && a.IsFaceUp()) a.RequestFlip(); 
-        if (!b.isMatched && b.IsFaceUp()) b.RequestFlip();
+        if (!a.isMatched && a.IsFaceUp())
+            a.RequestFlip();
+
+        if (!b.isMatched && b.IsFaceUp())
+            b.RequestFlip();
+
+        faceUpOrder.Clear();
+
+        resolvingMismatch = false;
     }
+
 
     private void DisableCardInteraction(Card c)
     {
